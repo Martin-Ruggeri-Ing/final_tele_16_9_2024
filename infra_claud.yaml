@@ -22,7 +22,10 @@ spec:
         - containerPort: 8080
         env:
         - name: OLLAMA_BASE_URL
-          value: "http://10.201.2.136:8080"
+          valueFrom:
+            configMapKeyRef:
+              name: open-webui-config
+              key: OLLAMA_BASE_URL
         volumeMounts:
         - name: open-webui-data
           mountPath: /app/backend/data
@@ -35,6 +38,16 @@ spec:
       resources:
         requests:
           storage: 1Gi
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open-webui-config
+  namespace: ruggeriml-dev
+data:
+  OLLAMA_BASE_URL: "http://10.201.2.136:8080"
 
 ---
 
